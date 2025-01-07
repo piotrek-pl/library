@@ -6,15 +6,15 @@ public class Book {
     private int id;
     private String title;
     private String author;
+    private String isbn;
 
-    // Konstruktor bezargumentowy potrzebny dla JSON-B
     public Book() {}
 
-    // Konstruktor z argumentami
-    public Book(int id, String title, String author) {
+    public Book(int id, String title, String author, String isbn) {
         this.id = id;
         this.title = title;
         this.author = author;
+        this.isbn = isbn;
     }
 
     @JsonbProperty("id")
@@ -42,5 +42,14 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @JsonbProperty("isbn")
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }

@@ -13,46 +13,42 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class) // Używamy Mockito Extension
+@ExtendWith(MockitoExtension.class)
 class BookServiceTest {
 
     @InjectMocks
-    BookService bookService; // BookService będzie mieć wstrzyknięte mocki
+    BookService bookService;
 
     @Mock
-    BookRepository bookRepository; // Mockujemy BookRepository
+    BookRepository bookRepository;
 
     @BeforeEach
     void setUp() {
-        // Opcjonalnie: Możesz skonfigurować zachowanie mocka tutaj lub w poszczególnych testach
     }
 
     @Test
     void testAddAndGetBook() {
-        Book book = new Book(1, "Effective Java", "Joshua Bloch");
+        Book book = new Book(1, "Effective Java", "Joshua Bloch", "978-0134685991");
 
-        // Definiujemy zachowanie mocka
         when(bookRepository.save(book)).thenReturn(book);
         when(bookRepository.findById(1)).thenReturn(book);
 
-        // Wywołujemy metody serwisu
         bookService.addBook(book);
         Book retrievedBook = bookService.getBookById(1);
 
-        // Weryfikujemy wyniki
         assertNotNull(retrievedBook);
         assertEquals("Effective Java", retrievedBook.getTitle());
         assertEquals("Joshua Bloch", retrievedBook.getAuthor());
+        assertEquals("978-0134685991", retrievedBook.getIsbn());
 
-        // Weryfikujemy interakcje z mockiem
         verify(bookRepository, times(1)).save(book);
         verify(bookRepository, times(1)).findById(1);
     }
 
     @Test
     void testUpdateBook() {
-        Book book = new Book(2, "Clean Code", "Robert C. Martin");
-        Book updatedBook = new Book(2, "Clean Code: A Handbook of Agile Software Craftsmanship", "Robert C. Martin");
+        Book book = new Book(2, "Clean Code", "Robert C. Martin", "978-0132350884");
+        Book updatedBook = new Book(2, "Clean Code: A Handbook of Agile Software Craftsmanship", "Robert C. Martin", "978-0132350884");
 
         when(bookRepository.save(book)).thenReturn(book);
         when(bookRepository.update(2, updatedBook)).thenReturn(updatedBook);
@@ -72,7 +68,7 @@ class BookServiceTest {
 
     @Test
     void testDeleteBook() {
-        Book book = new Book(3, "The Pragmatic Programmer", "Andrew Hunt");
+        Book book = new Book(3, "The Pragmatic Programmer", "Andrew Hunt", "978-0201616224");
 
         when(bookRepository.save(book)).thenReturn(book);
         when(bookRepository.delete(3)).thenReturn(true);
@@ -92,8 +88,8 @@ class BookServiceTest {
 
     @Test
     void testGetAllBooks() {
-        Book book1 = new Book(4, "Design Patterns", "Erich Gamma");
-        Book book2 = new Book(5, "Refactoring", "Martin Fowler");
+        Book book1 = new Book(4, "Design Patterns", "Erich Gamma", "978-0201633610");
+        Book book2 = new Book(5, "Refactoring", "Martin Fowler", "978-0134757599");
 
         when(bookRepository.findAll()).thenReturn(Arrays.asList(book1, book2));
 

@@ -3,11 +3,13 @@ package com.example.library;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ApplicationScoped
 public class BookRepository {
 
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
+    private final AtomicInteger nextId = new AtomicInteger(1);
 
     public List<Book> findAll() {
         return books;
@@ -21,6 +23,7 @@ public class BookRepository {
     }
 
     public Book save(Book book) {
+        book.setId(nextId.getAndIncrement());
         books.add(book);
         return book;
     }
@@ -30,6 +33,7 @@ public class BookRepository {
         if (existingBook != null) {
             existingBook.setTitle(updatedBook.getTitle());
             existingBook.setAuthor(updatedBook.getAuthor());
+            existingBook.setIsbn(updatedBook.getIsbn());
             return existingBook;
         }
         return null;
